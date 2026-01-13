@@ -272,6 +272,9 @@
     </div>
 
     <script>
+        // MODIFICA QUESTO PERCORSO con la cartella dove si trovano le immagini
+        const IMAGE_FOLDER = 'images/'; // Cambia con il percorso corretto
+
         const sequences = [
             { images: ['1', '2', '3 - 6'], layout: 3 },
             { images: ['4', '1'], layout: 2 },
@@ -295,7 +298,7 @@
         const modalImg = document.getElementById('modalImg');
 
         function openModal(imgName) {
-            modalImg.src = `${imgName}.JPG`;
+            modalImg.src = `${IMAGE_FOLDER}${imgName}.JPG`;
             modal.classList.add('active');
             resetZoom();
         }
@@ -406,7 +409,7 @@
                 wrapper.className = 'image-wrapper';
                 
                 const img = document.createElement('img');
-                img.src = `${imgName}.JPG`;
+                img.src = `${IMAGE_FOLDER}${imgName}.JPG`;
                 img.alt = `Immagine ${imgName}`;
                 img.onerror = () => {
                     wrapper.style.backgroundColor = '#555';
