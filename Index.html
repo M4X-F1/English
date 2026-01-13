@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inglese</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #000;
+            border-radius: 10px;
+            overflow: visible;
+            padding-bottom: 80px;
+        }
+
+        .gallery {
+            display: grid;
+            gap: 15px;
+            padding: 20px;
+            width: fit-content;
+        }
+
+        .gallery {
+            display: grid;
+            gap: 15px;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .gallery.layout-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .gallery.layout-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .gallery.layout-1 {
+            grid-template-columns: 1fr;
+        }
+
+        .image-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            aspect-ratio: 4/3;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .image-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .open-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            z-index: 6;
+        }
+
+        .open-btn:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        button {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .counter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* Modal fullscreen */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            cursor: grab;
+            transition: transform 0.2s ease;
+            touch-action: none;
+        }
+
+        .modal-content img:active {
+            cursor: grabbing;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            z-index: 1001;
+        }
+
+        .modal-close:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                gap: 10px;
+                padding: 15px;
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery {
+                gap: 8px;
+                padding: 10px;
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            button {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .counter {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
+            .image-label {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+
+            .open-btn {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+
+            .carousel {
+                padding-bottom: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="carousel">
+            <div class="gallery" id="gallery"></div>
+            <div class="counter"><span id="current">1</span> / 13</div>
+            <div class="controls">
+                <button id="prevBtn">← Indietro</button>
+                <button id="nextBtn">Avanti →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal per visualizzazione fullscreen -->
+    <div class="modal" id="modal">
+        <button class="modal-close" onclick="closeModal()">✕ Chiudi</button>
+        <div class="modal-content">
+            <img id="modalImg" src="" alt="">
+        </div>
+    </div>
+
+    <script>
+        const sequences = [
+            { images: ['1', '2', '3 - 6'], layout: 3 },
+            { images: ['4', '1'], layout: 2 },
+            { images: ['5'], layout: 1 },
+            { images: ['6', '3 - 6', '7'], layout: 3 },
+            { images: ['8'], layout: 1 },
+            { images: ['9'], layout: 1 },
+            { images: ['10'], layout: 1 },
+            { images: ['11'], layout: 1 },
+            { images: ['12'], layout: 1 },
+            { images: ['13'], layout: 1 }
+        ];
+
+        let currentStep = 0;
+
+        const gallery = document.getElementById('gallery');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const counter = document.getElementById('current');
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modalImg');
+
+        function openModal(imgName) {
+            modalImg.src = `${imgName}.JPG`;
+            modal.classList.add('active');
+            resetZoom();
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            resetZoom();
+        }
+
+        let zoomLevel = 1;
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let translateX = 0;
+        let translateY = 0;
+
+        function resetZoom() {
+            zoomLevel = 1;
+            translateX = 0;
+            translateY = 0;
+            updateImageTransform();
+        }
+
+        function updateImageTransform() {
+            modalImg.style.transform = `scale(${zoomLevel}) translate(${translateX}px, ${translateY}px)`;
+        }
+
+        // Zoom con rotella mouse (PC)
+        modal.addEventListener('wheel', (e) => {
+            if (!modal.classList.contains('active')) return;
+            e.preventDefault();
+            
+            const zoomSpeed = 0.1;
+            const oldZoom = zoomLevel;
+            zoomLevel += (e.deltaY > 0 ? -zoomSpeed : zoomSpeed);
+            zoomLevel = Math.max(1, Math.min(zoomLevel, 5));
+            
+            if (zoomLevel === 1) {
+                translateX = 0;
+                translateY = 0;
+            }
+            
+            updateImageTransform();
+        }, { passive: false });
+
+        // Zoom touch (Mobile - pinch)
+        let lastDistance = 0;
+        modal.addEventListener('touchmove', (e) => {
+            if (!modal.classList.contains('active') || e.touches.length !== 2) return;
+            e.preventDefault();
+            
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            const distance = Math.hypot(
+                touch2.clientX - touch1.clientX,
+                touch2.clientY - touch1.clientY
+            );
+            
+            if (lastDistance > 0) {
+                const scale = distance / lastDistance;
+                zoomLevel *= scale;
+                zoomLevel = Math.max(1, Math.min(zoomLevel, 5));
+                updateImageTransform();
+            }
+            
+            lastDistance = distance;
+        }, { passive: false });
+
+        modal.addEventListener('touchend', () => {
+            lastDistance = 0;
+        });
+
+        // Dragging su immagine zoomata
+        modalImg.addEventListener('mousedown', (e) => {
+            if (zoomLevel <= 1) return;
+            isDragging = true;
+            dragStartX = e.clientX - translateX;
+            dragStartY = e.clientY - translateY;
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            translateX = e.clientX - dragStartX;
+            translateY = e.clientY - dragStartY;
+            
+            const maxTranslate = (modalImg.offsetWidth * (zoomLevel - 1)) / 2;
+            translateX = Math.max(-maxTranslate, Math.min(maxTranslate, translateX));
+            translateY = Math.max(-maxTranslate, Math.min(maxTranslate, translateY));
+            
+            updateImageTransform();
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        function renderGallery() {
+            gallery.innerHTML = '';
+            const currentSequence = sequences[currentStep];
+            
+            gallery.classList.remove('layout-1', 'layout-2', 'layout-3');
+            gallery.classList.add(`layout-${currentSequence.layout}`);
+
+            currentSequence.images.forEach(imgName => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'image-wrapper';
+                
+                const img = document.createElement('img');
+                img.src = `${imgName}.JPG`;
+                img.alt = `Immagine ${imgName}`;
+                img.onerror = () => {
+                    wrapper.style.backgroundColor = '#555';
+                    wrapper.textContent = `Immagine ${imgName}\nnon trovata`;
+                    wrapper.style.display = 'flex';
+                    wrapper.style.flexDirection = 'column';
+                    wrapper.style.color = '#999';
+                    wrapper.style.fontSize = '14px';
+                };
+                
+                const label = document.createElement('div');
+                label.className = 'image-label';
+                label.textContent = `${imgName}`;
+                
+                const openBtn = document.createElement('button');
+                openBtn.className = 'open-btn';
+                openBtn.textContent = '🔍 Apri';
+                openBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    openModal(imgName);
+                };
+                
+                wrapper.appendChild(img);
+                wrapper.appendChild(label);
+                wrapper.appendChild(openBtn);
+                gallery.appendChild(wrapper);
+            });
+
+            counter.textContent = currentStep + 1;
+        }
+
+        function nextStep() {
+            if (currentStep < sequences.length - 1) {
+                currentStep++;
+                renderGallery();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                renderGallery();
+            }
+        }
+
+        nextBtn.addEventListener('click', nextStep);
+        prevBtn.addEventListener('click', prevStep);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextStep();
+            if (e.key === 'ArrowLeft') prevStep();
+            if (e.key === 'Escape') closeModal();
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        let touchStartX = 0;
+        gallery.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+
+        gallery.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            if (touchStartX - touchEndX > 50) nextStep();
+            if (touchEndX - touchStartX > 50) prevStep();
+        });
+
+        renderGallery();
+    </script>
+</body>
+</html>
