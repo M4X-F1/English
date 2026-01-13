@@ -41,13 +41,6 @@
             display: grid;
             gap: 15px;
             padding: 20px;
-            width: fit-content;
-        }
-
-        .gallery {
-            display: grid;
-            gap: 15px;
-            padding: 20px;
             width: 100%;
         }
 
@@ -152,7 +145,6 @@
             font-size: 14px;
         }
 
-        /* Modal fullscreen */
         .modal {
             display: none;
             position: fixed;
@@ -263,7 +255,6 @@
         </div>
     </div>
 
-    <!-- Modal per visualizzazione fullscreen -->
     <div class="modal" id="modal">
         <button class="modal-close" onclick="closeModal()">✕ Chiudi</button>
         <div class="modal-content">
@@ -272,9 +263,6 @@
     </div>
 
     <script>
-        // MODIFICA QUESTO PERCORSO con la cartella dove si trovano le immagini
-        const IMAGE_FOLDER = 'images/'; // Cambia con il percorso corretto
-
         const sequences = [
             { images: ['1', '2', '3 - 6'], layout: 3 },
             { images: ['4', '1'], layout: 2 },
@@ -298,7 +286,7 @@
         const modalImg = document.getElementById('modalImg');
 
         function openModal(imgName) {
-            modalImg.src = `${IMAGE_FOLDER}${imgName}.JPG`;
+            modalImg.src = `${imgName}.JPG`;
             modal.classList.add('active');
             resetZoom();
         }
@@ -326,13 +314,11 @@
             modalImg.style.transform = `scale(${zoomLevel}) translate(${translateX}px, ${translateY}px)`;
         }
 
-        // Zoom con rotella mouse (PC)
         modal.addEventListener('wheel', (e) => {
             if (!modal.classList.contains('active')) return;
             e.preventDefault();
             
             const zoomSpeed = 0.1;
-            const oldZoom = zoomLevel;
             zoomLevel += (e.deltaY > 0 ? -zoomSpeed : zoomSpeed);
             zoomLevel = Math.max(1, Math.min(zoomLevel, 5));
             
@@ -344,7 +330,6 @@
             updateImageTransform();
         }, { passive: false });
 
-        // Zoom touch (Mobile - pinch)
         let lastDistance = 0;
         modal.addEventListener('touchmove', (e) => {
             if (!modal.classList.contains('active') || e.touches.length !== 2) return;
@@ -371,7 +356,6 @@
             lastDistance = 0;
         });
 
-        // Dragging su immagine zoomata
         modalImg.addEventListener('mousedown', (e) => {
             if (zoomLevel <= 1) return;
             isDragging = true;
@@ -409,7 +393,7 @@
                 wrapper.className = 'image-wrapper';
                 
                 const img = document.createElement('img');
-                img.src = `${IMAGE_FOLDER}${imgName}.JPG`;
+                img.src = `${imgName}.JPG`;
                 img.alt = `Immagine ${imgName}`;
                 img.onerror = () => {
                     wrapper.style.backgroundColor = '#555';
